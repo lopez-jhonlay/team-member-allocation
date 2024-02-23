@@ -1,75 +1,7 @@
-import React, { useState } from 'react'
 import femaleProfile from './assets/femaleProfile.jpg'
 import maleProfile from './assets/maleProfile.jpg'
 
-const Employees = () => {
-
-    const [selectedTeam, setTeam] = useState("");
-
-    const [employees, setEmployees] = useState([
-        {
-            id: 1,
-            full_name: "Jhon Lay Lopez",
-            designation: "ReactJS Developer",
-            gender: "Male",
-            team_name: "TeamA"
-        },
-        {
-            id: 2,
-            full_name: "John Doe",
-            designation: "PHP Developer",
-            gender: "Male",
-            team_name: "TeamA"
-        },
-        {
-            id: 3,
-            full_name: "Jane Dee",
-            designation: "ReactJS Developer",
-            gender: "Female",
-            team_name: "TeamB"
-        },
-        {
-            id: 4,
-            full_name: "Justin Canard",
-            designation: "PHP Developer",
-            gender: "Male",
-            team_name: "TeamB"
-        },
-        {
-            id: 5,
-            full_name: "Melody Sunshine",
-            designation: "ReactJS Developer",
-            gender: "Female",
-            team_name: "TeamC"
-        },
-        {
-            id: 6,
-            full_name: "Christian Fox",
-            designation: "PHP Developer",
-            gender: "Male",
-            team_name: "TeamC"
-        },
-        {
-            id: 7,
-            full_name: "Sam Smith",
-            designation: "ReactJS Developer",
-            gender: "Male",
-            team_name: "TeamD"
-        },
-        {
-            id: 8,
-            full_name: "Christian Alexander",
-            designation: "PHP Developer",
-            gender: "Male",
-            team_name: "TeamD"
-        }
-
-    ]);
-
-    const handleSelectTeam = (event) => {
-        console.log(event.target.value);
-        setTeam(event.target.value);
-    }
+const Employees = ({employees, selectedTeam, handleSelectTeam, handleEmployeeCardClick}) => {
 
     return (
     <main className="container">
@@ -86,11 +18,14 @@ const Employees = () => {
                 </select>
             </div>
         </div>
+        <hr />
         <div className="row justify-content-center mt-3 mb-3">
             <div className="col-8">
                 <div className="card-collection">
                     {employees.map((employee) => (
-                        <div id={employee.id} className="card m-2 card-pointer">
+                        <div id={employee.id} className={(employee.team_name === selectedTeam ?
+                            "card m-2 card-pointer standout"  : "card m-2 card-pointer")}
+                                onClick={handleEmployeeCardClick}>
                             {
                                 (employee.gender === 'Male') ? <img src={maleProfile}
                                     alt="profile"
