@@ -10,7 +10,6 @@ const Employees = ({employees, selectedTeam, handleSelectTeam, handleEmployeeCar
                 <select className="form-select form-select-lg"
                         value={selectedTeam}
                         onChange={handleSelectTeam}>
-                    <option value="" disabled>Select a Team</option>
                     <option value="TeamA">Team A</option>
                     <option value="TeamB">Team B</option>
                     <option value="TeamC">Team C</option>
@@ -23,7 +22,7 @@ const Employees = ({employees, selectedTeam, handleSelectTeam, handleEmployeeCar
             <div className="col-8">
                 <div className="card-collection">
                     {employees.map((employee) => (
-                        <div id={employee.id} className={(employee.team_name === selectedTeam ?
+                        <div key={employee.id} id={employee.id} className={(employee.team_name === selectedTeam ?
                             "card m-2 card-pointer standout"  : "card m-2 card-pointer")}
                                 onClick={handleEmployeeCardClick}>
                             {

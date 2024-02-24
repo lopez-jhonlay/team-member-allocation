@@ -1,15 +1,19 @@
 import React from 'react'
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
+import { BrowserRouter as Router, Route, Routes } from 'react-router-dom'
 import HeaderComponent from './HeaderComponent'
 import FooterComponent from './FooterComponent'
 import Employees from './Employees'
+import GroupedTeamMembers from './GroupedTeamMembers'
+import NavbarComponent from './NavbarComponent'
+import NotFoundComponent from './NotFoundComponent'
 
 
 function App() {
 
-  const [selectedTeam, setTeam] = useState("");
+  const [selectedTeam, setTeam] = useState(JSON.parse(localStorage.getItem('selectedTeam')) || "TeamA");
 
-  const [employees, setEmployees] = useState([
+  const [employees, setEmployees] = useState(JSON.parse(localStorage.getItem('employeeList')) || [
       {
           id: 1,
           full_name: "Jhon Lay Lopez",
@@ -69,6 +73,14 @@ function App() {
 
   ]);
 
+  useEffect(() => {
+    localStorage.setItem('employeeList', JSON.stringify(employees))
+  }, [employees])
+
+  useEffect(() => {
+    localStorage.setItem('selectedTeam', JSON.stringify(selectedTeam))
+  }, [selectedTeam])
+
   const handleSelectTeam = (event) => {
       //console.log(event.target.value);
       setTeam(event.target.value);
@@ -86,15 +98,28 @@ function App() {
   }
 
   return (
-    <>
-      <HeaderComponent selectedTeam={selectedTeam}
-                       teamMemberCount = {employees.filter((employee) => employee.team_name === selectedTeam).length} />
-      <Employees employees={employees} 
-                 selectedTeam={selectedTeam}
-                 handleEmployeeCardClick={handleEmployeeCardClick}
-                 handleSelectTeam={handleSelectTeam} />
-      <FooterComponent />
-    </>
+    <Router>
+        <NavbarComponent />
+        <HeaderComponent selectedTeam={selectedTeam}
+                        teamMemberCount = {employees.filter(
+                            (employee) => employee.team_name === selectedTeam
+                        ).length} />
+        <Routes>
+            <Route path="/" element={
+                <Employees employees={employees}
+                selectedTeam={selectedTeam}
+                handleEmployeeCardClick={handleEmployeeCardClick}
+                handleSelectTeam={handleSelectTeam} />
+            }>
+            </Route>
+            <Route path="/GroupedTeamMembers" element={
+                <GroupedTeamMembers employees={employees} selectedTeam={selectedTeam} setTeam={setTeam} />
+            }>
+            </Route>
+            <Route path="*" element={<NotFoundComponent />}></Route>
+        </Routes>
+        <FooterComponent />
+    </Router>
   )
 }
 
